@@ -47,3 +47,8 @@ Temporary Items
 .apdisk
 
 !*.obj
+
+# Java ignore files
+*.class
+# DrJava ignore files
+*.java~

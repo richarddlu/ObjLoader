@@ -1,9 +1,6 @@
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.charset.Charset;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.BufferedReader;
-import java.nio.file.Files;
 import java.io.IOException;
 
 public class ObjLoader {
@@ -13,15 +10,19 @@ public class ObjLoader {
       return;
     
     String line_trimmed = line.trim();
-    String[] eles = line_trimmed.split(" ");
+    String[] eles = line_trimmed.split("\\s+");
     if (eles[0].equals("v")) { // vertex
-      model.vertices.add(Float.parseFloat(eles[1]));
-      model.vertices.add(Float.parseFloat(eles[2]));
-      model.vertices.add(Float.parseFloat(eles[3]));
+        model.vertices.add(Float.parseFloat(eles[1]));
+        model.vertices.add(Float.parseFloat(eles[2]));
+        model.vertices.add(Float.parseFloat(eles[3]));
     } else if (eles[0].equals("f")) {
-      model.faces.add(Integer.parseInt(eles[1]));
-      model.faces.add(Integer.parseInt(eles[2]));
-      model.faces.add(Integer.parseInt(eles[3]));
+      String[] comb;
+      comb = eles[1].split("/");
+      model.faces.add(Integer.parseInt(comb[0]));
+      comb = eles[2].split("/");
+      model.faces.add(Integer.parseInt(comb[0]));
+      comb = eles[3].split("/");
+      model.faces.add(Integer.parseInt(comb[0]));
     } else if(eles[0].equals("vn")) {
       model.normals.add(Float.parseFloat(eles[1]));
       model.normals.add(Float.parseFloat(eles[2]));
@@ -32,11 +33,9 @@ public class ObjLoader {
     }
   }
   
-  public static Model load(String filepath) throws IOException, NumberFormatException {
-     Model model = new Model();
-    Path objpath = Paths.get(filepath);
-    Charset charset = Charset.forName("UTF-8");
-    BufferedReader reader = Files.newBufferedReader(objpath, charset);
+  public static Model load(InputStream is) throws IOException, NumberFormatException {
+    Model model = new Model();
+    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
     String line;
     while ((line = reader.readLine()) != null) {
       parseLine(line, model);
