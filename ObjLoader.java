@@ -16,13 +16,17 @@ public class ObjLoader {
         model.vertices.add(Float.parseFloat(eles[2]));
         model.vertices.add(Float.parseFloat(eles[3]));
     } else if (eles[0].equals("f")) {
-      String[] comb;
-      comb = eles[1].split("/");
-      model.faces.add(Integer.parseInt(comb[0]));
-      comb = eles[2].split("/");
-      model.faces.add(Integer.parseInt(comb[0]));
-      comb = eles[3].split("/");
-      model.faces.add(Integer.parseInt(comb[0]));
+      model.faceVerCounts.add(eles.length - 1);
+      for (int i = 1; i < eles.length; i++) {
+        String[] comb;
+        comb = eles[i].split("/");
+        if (comb.length > 0)
+          model.faces.add(Integer.parseInt(comb[0]));
+        if (comb.length > 1)
+          model.faceTexCoords.add(Integer.parseInt(comb[1]));
+        if (comb.length > 2)
+          model.faceNorCoords.add(Integer.parseInt(comb[2]));
+      }
     } else if(eles[0].equals("vn")) {
       model.normals.add(Float.parseFloat(eles[1]));
       model.normals.add(Float.parseFloat(eles[2]));
